@@ -35,13 +35,13 @@ for i in range(0,xsize):#filling xsize x ysize array with gamma values
 				theta[j,i]=np.pi/2
 			theta[j,i]=theta[j,i]+np.pi/2
 		else:
-			theta[j,i]=(np.pi/2)+np.arctan((j-ypos)/(i-xpos))
+			theta[j,i]=(np.pi/2)+np.arctan((j-ypos+0.5)/(i-xpos+0.5))
 			#R[j,i]=1/((j-ypos)**2+(i-xpos)**2)
 		
 			
 		#print(j,i)
 		if i-xpos !=0 or j-ypos !=0:
-			R[j,i]=1/((i-xpos)**2+(j-ypos)**2)
+			R[j,i]=1/((i-xpos+0.5)**2+(j-ypos+0.5)**2)
 		if i-xpos <0:
 			#theta[j,i]=theta[j,i]
 			R[j,i]=-R[j,i]	
@@ -93,16 +93,13 @@ for l in range(0,xsize):
 	for i in range(0, ysize):
 		xi1=i-xsize/2
 		xi2=l-ysize/2
-		if xi1 == 0: 
-			psit[l,i]=0
-		else:
-			psit[l,i]=np.divide(gammat[l,i]*(xi1**2-xi2**2-2j*xi1*xi2),2*(np.pi**2)*(xi1**2*xi2**2)**2)
-		if xi2==0:
+		if xi1 == 0 or xi2 ==0: 
 			psit[l,i]=0 # otherwise is infinite
+		
 					
 		else:
 			psit[l,i]=np.divide(gammat[l,i]*(xi1**2-xi2**2-2j*xi1*xi2),2*(np.pi**2)*(xi1**2*xi2**2)**2) # calculating psi tilda, according to eqns [15/12/15]
-
+		
 		kappat[l,i]=(xi1**2-xi2**2-2j*(xi1*xi2))*gammat[l,i]   #calculate kappa tilda according to eqns [15/12/15]
 	l=0
  
@@ -118,8 +115,8 @@ print('psir', psireal)
 print('kappar', kappareal)
 
 psi=np.fft.ifftshift(psireal) # inverse shift of psi, should be done!
-#kappa=np.fft.ifftshift(kappareal) # shifting kappa back, should be it!
-kappa=kappareal 
+kappa=np.fft.ifftshift(kappareal) # shifting kappa back, should be it!
+ 
 
 #Produce plots of both kappa and psi
 
