@@ -59,11 +59,6 @@ mpl.quiver(Rx, Ry)
 
 mpl.show()
 
-for i in range(0, xsize):
-	for j in range(0, ysize):
-		if i<50:
-			Rx[j,i]=-Rx[j,i]
-			Ry[j,i]=-Ry[j,i]
 
 
 #NEED TO DEFINE SIZES
@@ -123,8 +118,8 @@ print('psir', psireal)
 print('kappar', kappareal)
 
 psi=np.fft.ifftshift(psireal) # inverse shift of psi, should be done!
-kappa=np.fft.ifftshift(kappareal) # shifting kappa back, should be it!
-
+#kappa=np.fft.ifftshift(kappareal) # shifting kappa back, should be it!
+kappa=kappareal 
 
 #Produce plots of both kappa and psi
 
