@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as mpl
 import matplotlib as matplot
 
+#omgi'medittingandgitting
+
 xsize=100
 ysize=100
 
