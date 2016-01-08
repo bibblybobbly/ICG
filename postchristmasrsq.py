@@ -22,7 +22,7 @@ R=np.zeros((xsize, ysize))
 
 for i in range(0,xsize):#filling xsize x ysize array with gamma values 
 	for j in range(0, ysize):
-		R[j,i]=np.exp(-((i-xpos)**2+(j-ypos)**2)/(sigma**2))
+		#R[j,i]=np.exp(-((i-xpos)**2+(j-ypos)**2)/(sigma**2))
 		
 		if i-xpos ==0:
 			if j-ypos<0:
@@ -38,12 +38,13 @@ for i in range(0,xsize):#filling xsize x ysize array with gamma values
 			theta[j,i]=(np.pi/2)+np.arctan((j-ypos)/(i-xpos))
 			#R[j,i]=1/((j-ypos)**2+(i-xpos)**2)
 		
+			
+		#print(j,i)
+		if i-xpos !=0 or j-ypos !=0:
+			R[j,i]=1/((i-xpos)**2+(j-ypos)**2)
 		if i-xpos <0:
 			#theta[j,i]=theta[j,i]
-			R[j,i]=-R[j,i]		
-		print(j,i)
-
-
+			R[j,i]=-R[j,i]	
 #R[49,50]=0.00002
 #R[50,49]=0.00002
 #R[51,50]=0.00002
