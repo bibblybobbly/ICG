@@ -38,14 +38,17 @@ for i in range(0,xsize):#filling xsize x ysize array with gamma values
 			theta[j,i]=(np.pi/2)+np.arctan((j-ypos)/(i-xpos))
 			#R[j,i]=1/((j-ypos)**2+(i-xpos)**2)
 		
-		
+		if i-xpos <0:
+			#theta[j,i]=theta[j,i]
+			R[j,i]=-R[j,i]		
 		print(j,i)
 
 
-R[49,50]=0.00002
-R[50,49]=0.00002
-R[51,50]=0.00002
-R[50,51]=0.00002
+#R[49,50]=0.00002
+#R[50,49]=0.00002
+#R[51,50]=0.00002
+#R[50,51]=0.00002
+R[50,50]=0
 print(np.max(theta), np.min(theta))
 
 Rx=np.multiply(R, np.cos(theta))
