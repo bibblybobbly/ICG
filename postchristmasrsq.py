@@ -35,13 +35,13 @@ for i in range(0,xsize):#filling xsize x ysize array with gamma values
 				theta[j,i]=np.pi/2
 			theta[j,i]=theta[j,i]+np.pi/2
 		else:
-			theta[j,i]=(np.pi/2)+np.arctan((j-ypos)/(i-xpos))
+			theta[j,i]=(np.pi/2)+np.arctan((j-ypos+0.5)/(i-xpos+0.5))
 			#R[j,i]=1/((j-ypos)**2+(i-xpos)**2)
 		
 			
 		#print(j,i)
 		if i-xpos !=0 or j-ypos !=0:
-			R[j,i]=kons/((i-xpos)**2+(j-ypos)**2)
+			R[j,i]=kons/((i-xpos+0.5)**2+(j-ypos+0.5)**2)
 		if i-xpos < 0:
 			#theta[j,i]=theta[j,i]
 			R[j,i]=-R[j,i]	
