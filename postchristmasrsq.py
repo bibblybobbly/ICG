@@ -14,7 +14,7 @@ sigmax=5
 sigmay=5
 sigma=10
 fac=10000
-
+kons= 5*10**8 # constant in front of r^-2
 R2=np.zeros((xsize, ysize))
 theta=np.zeros((xsize, ysize))
 R=np.zeros((xsize, ysize))
@@ -41,15 +41,15 @@ for i in range(0,xsize):#filling xsize x ysize array with gamma values
 			
 		#print(j,i)
 		if i-xpos !=0 or j-ypos !=0:
-			R[j,i]=1/((i-xpos+0.5)**2+(j-ypos+0.5)**2)
-		if i-xpos <0:
+			R[j,i]=kons/((i-xpos+0.5)**2+(j-ypos+0.5)**2)
+		if i-xpos < 0:
 			#theta[j,i]=theta[j,i]
 			R[j,i]=-R[j,i]	
 #R[49,50]=0.00002
 #R[50,49]=0.00002
 #R[51,50]=0.00002
 #R[50,51]=0.00002
-R[50,50]=0
+#R[50,50]=0
 print(np.max(theta), np.min(theta))
 
 Rx=np.multiply(R, np.cos(theta))
@@ -59,7 +59,7 @@ mpl.quiver(Rx, Ry)
 
 mpl.show()
 
-
+mpl.imshow(Rx)
 
 #NEED TO DEFINE SIZES
 
@@ -80,7 +80,13 @@ gamma2t=np.fft.ifftshift(Rysft)   # converting FFT into gammas, by inverse shift
 
 gammat=gamma1t+np.multiply(gamma2t, 1j)  # gamma tilda, by definition
 
+#gammats=np.fft.fftshift(gammat)
+#gammas=np.fft.ifft2
 
+mpl.figure(55)
+mpl.imshow(np.real(gammat))
+print('49,49', gammat[49,49])
+print('49,51', gammat[49,51])
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 psit=np.zeros((ysize, xsize), dtype=np.complex)
@@ -91,8 +97,8 @@ kappat=np.zeros((ysize, xsize), dtype=np.complex) #define arrays to be filled by
 i=0
 for l in range(0,xsize):
 	for i in range(0, ysize):
-		xi1=i-xsize/2
-		xi2=l-ysize/2
+		xi1=(i-xsize/2)+0.5
+		xi2=(l-ysize/2)+0.5
 		if xi1 == 0 or xi2 ==0: 
 			psit[l,i]=0 # otherwise is infinite
 		
@@ -109,30 +115,35 @@ psigr=np.real(psit)
 psiprep=np.fft.fftshift(psit) #shifting psit for inverse FFT
 kappaprep=np.fft.fftshift(kappat) #shifting kappat for inverse FFT
 
-psireal=np.fft.ifft(psiprep)  #inverse FFT of psit
-kappareal=np.fft.ifft(kappaprep)
+psireal=np.fft.ifft2(psiprep)  #inverse FFT of psit
+kappareal=np.fft.ifft2(kappaprep)
 print('psir', psireal)
 print('kappar', kappareal)
 
 psi=np.fft.ifftshift(psireal) # inverse shift of psi, should be done!
 kappa=np.fft.ifftshift(kappareal) # shifting kappa back, should be it!
- 
 
+print('psi', psi)
+print('kappa', kappa)
+
+psi=np.real(psi)
+kappa=np.real(kappa)
 #Produce plots of both kappa and psi
 
 psideforeal=np.real(np.multiply(psi, np.conj(psi)))
 kappadeforeal=np.real(np.multiply(kappa, np.conj(kappa)))
 
+#print('49,49 + 51,51', psigr 
 
 mpl.figure(5)
 mpl.subplot(1,2,1)
-mpl.imshow(psigr)
-mpl.title('Psi results')
+mpl.imshow(psi)
+mpl.title('Real component of Psi results')
 mpl.colorbar()
 
 mpl.subplot(1,2,2)
 mpl.imshow(kappadeforeal)
-mpl.title('Kappa results')
+mpl.title('Real component of Kappa results')
 mpl.colorbar()
 mpl.show()
 
