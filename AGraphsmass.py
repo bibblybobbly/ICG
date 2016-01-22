@@ -352,9 +352,11 @@ for d in range(0, binz+1):
 	
 
 
-FieldAXDir=np.multiply(eA, np.cos(thetaA))
-FieldAYDir=np.multiply(eA, np.sin(thetaA))
+FieldAXDir=np.multiply(eA, np.cos(2*thetaA))
+FieldAYDir=np.multiply(eA, np.sin(2*thetaA))
 
+xstretchA=np.multiply(eA, np.cos(thetaA))
+xstretchA=np.multiply(eA, np.sin(thetaA))
 
 
 
@@ -526,7 +528,7 @@ print('bins in C', binzc)
 bigx=np.amax(xfieldccut)
 minix=np.amin(xfieldccut)
 stepx=(bigx-minix)/binzc
-binzcxst=range(binzc)
+binzcxst=range(binzc) 
 binzcxbc=binzcxst*stepx+minix
 
 bigy=np.amax(yfieldccut)
@@ -535,7 +537,7 @@ stepy=(bigy-miniy)/binzc
 binzcyst=range(binzc)
 binzcybc=binzcyst*stepy+miniy
 
-#print(binzcxbc)
+#print(binzcxbc) 
 
 xlocs=np.digitize(xfieldccut, binzcxbc)
 ylocs=np.digitize(yfieldccut, binzcybc)
@@ -760,8 +762,79 @@ print('Mean of nonzero bin counts in Field D', typical)
 
 
 
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#Producing mass maps
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#Field A
+Rx=FieldAXDir
+Ry=FieldAYDir
 
 
+#Take a field of shear vectors in x and y and convert that into kappa and psi maps
+
+
+
+#Define Rx as the x vectors of shear, Ry as the y vectors
+
+Rxshift=np.fft.fftshift(Rx)
+Ryshift=np.fft.fftshift(Ry)   #shifts vectors into edges for FFT
+
+Rxsft=np.fft.fft2(Rxshift)
+Rysft=np.fft.fft2(Ryshift)     # FFT of the vectors
+
+gamma1t=np.fft.ifftshift(Rxsft)
+gamma2t=np.fft.ifftshift(Rysft)   # converting FFT into gammas, by inverse shifting
+
+gammat=gamma1t+np.multiply(gamma2t, 1j)  # gamma tilda, by definition
+
+xsize=gammat.shape[1]
+ysize=gammat.shape[0] #required length of axes
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+psit=np.zeros((ysize, xsize), dtype=np.complex)
+kappat=np.zeros((ysize, xsize), dtype=np.complex) #define arrays to be filled by for loop, sizes of dimensions
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+i=0
+for l in range(0,xsize):
+	for i in range(0, ysize):
+		xi1=(i-xsize/2)
+		xi2=(l-ysize/2)
+		if xi1 == 0 or xi2 ==0: 
+			psit[l,i]=0 # otherwise is infinite
+		
+					
+		else:
+			psit[l,i]=np.divide(gammat[l,i]*(xi1**2-xi2**2-2j*xi1*xi2),2*(np.pi**2)*(xi1**2+xi2**2)**2) # calculating psi tilda, according to eqns [15/12/15]
+		
+		if xi1!=0 or xi2!=0:
+			kappat[l,i]=np.divide((xi1**2-xi2**2-2j*(xi1*xi2))*gammat[l,i], (xi1**2+xi2**2))   #calculate kappa tilda according to eqns [15/12/15]
+	
+		else:
+			kappat[l,i]=1 #is infinite at xi1=0, xi2=0  
+
+	
+ 
+
+
+psiprep=np.fft.fftshift(psit) #shifting psit for inverse FFT
+kappaprep=np.fft.fftshift(kappat) #shifting kappat for inverse FFT
+
+psireal=np.fft.ifft2(psiprep)  #inverse FFT of psit
+kappareal=np.fft.ifft2(kappaprep)
+
+
+
+psi=np.fft.ifftshift(psireal) # inverse shift of psi, should be done!
+kappa=np.fft.ifftshift(kappareal) # shifting kappa back, should be it!
+
+mpl.contourf(np.real(kappa))
+mpl.colorbar()
+pylab.savefig('KappaMap.png')
+mpl.close()
 
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -820,8 +893,14 @@ for xlimi in range(width, binzd+width, width):
 
 
 
-
-
+		mpl.contourf(np.real(kappa), cmap=mpl.cm.gray)
+		mpl.colorbar()
+		mpl.quiver(FieldAXDir, FieldAYDir, headwidth=0, headaxislength=100, pivot='middle', color='r')
+		mpl.xlim((xlimi-width, xlimi))
+		mpl.ylim((ylimi-width, ylimi))
+		pylab.savefig('AGraphs/New/'+str(xlimi)+' '+str(ylimi)+' Shear on Kappa Red.png')
+		mpl.close()
+ 
 
 
 
