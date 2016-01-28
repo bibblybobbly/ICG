@@ -38,7 +38,7 @@ for i in range(0,xsize):#filling xsize x ysize array with gamma values
 			theta[j,i]=np.arctan((j-ypos+0.5)/(i-xpos+0.5))#(np.pi/2)+
 			#R[j,i]=1/((j-ypos)**2+(i-xpos)**2)
 		if j-ypos==0:
-			theta[j,i]=np.pi/4
+			theta[j,i]=np.pi/2
 			
 		#print(j,i)
 		if i-xpos !=0 or j-ypos !=0:

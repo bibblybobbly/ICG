@@ -30,7 +30,7 @@ kappat=np.zeros((ysize, xsize), dtype=np.complex) #define arrays to be filled by
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 i=0
-#defining the central point of the FFT. 0.5 means that cente is bottom right hand of box, 0 means it is centre of middle
+#defining the central point of the FFT 
 
 if xsize%2==0:
 	xcor=0.5
@@ -48,7 +48,7 @@ else:
 for l in range(0,xsize):
 	for i in range(0, ysize):
 		xi1=(i-xsize/2)+xcor
-		xi2=(l-ysize/2)+ycor  
+		xi2=(l-ysize/2)+ycor #coordinates in Fourier domain, 0,0 being the bottom left hand coordinate of the gamma[ysize/2, xsize/2] coordinate. 
 		if xi1 == 0 or xi2 ==0: 
 			psit[l,i]=0 # otherwise is infinite
 		

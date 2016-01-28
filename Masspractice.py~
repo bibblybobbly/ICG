@@ -7,14 +7,14 @@ import matplotlib as matplot
 xsize=100
 ysize=100
 
-xpos=50
-ypos=50 #location of centre
+xpos=78
+ypos=31 #location of centre
 
 sigmax=5
 sigmay=5
 sigma=10
 fac=10000
-kons= 5*10**8 # constant in front of r^-2
+kons= 5*10**1 # constant in front of r^-2
 R2=np.zeros((xsize, ysize))
 theta=np.zeros((xsize, ysize))
 R=np.zeros((xsize, ysize))
@@ -22,36 +22,29 @@ R=np.zeros((xsize, ysize))
 
 for i in range(0,xsize):#filling xsize x ysize array with gamma values 
 	for j in range(0, ysize):
-		#R[j,i]=np.exp(-((i-xpos)**2+(j-ypos)**2)/(sigma**2))
+		
 		
 		if i-xpos ==0:
 			if j-ypos<0:
-				theta[j,i]=-(np.pi)/2
-				#R[j,i]=1/((j-ypos)**2+(i-xpos)**2)
+				theta[j,i]=0
+				
 			if j-ypos >0:
-				theta[j,i]=(np.pi)/2
-				#R[j,i]=1/((j-ypos)**2+(i-xpos)**2)
+				theta[j,i]=0
+				
 			if j-ypos ==0:
 				theta[j,i]=np.pi/2
-			#theta[j,i]=theta[j,i]+np.pi/2
-		else:
-			theta[j,i]=np.arctan((j-ypos+0.5)/(i-xpos+0.5))#(np.pi/2)+
-			#R[j,i]=1/((j-ypos)**2+(i-xpos)**2)
-		if j-ypos==0:
-			theta[j,i]=np.pi/4
 			
-		#print(j,i)
-		if i-xpos !=0 or j-ypos !=0:
-			R[j,i]=kons/((i-xpos+0.5)**2+(j-ypos+0.5)**2)
+		else:
+			theta[j,i]=(np.pi/2)+np.arctan((j-ypos+0.5)/(i-xpos+0.5))
 		
-#R[49,50]=0.00002
-#R[50,49]=0.00002
-#R[51,50]=0.00002
-#R[50,51]=0.00002
-#R[50,50]=0
+			
+		
+		if i-xpos !=0 or j-ypos !=0:
+			R[j,i]=kons/np.sqrt((i-xpos+0.5)**2+(j-ypos+0.5)**2)
+
 print(np.max(theta), np.min(theta))
 
-Rx=np.multiply(R, np.cos(2*theta))
+Rx=np.multiply(R, np.cos(2*theta)) #vectors in shear space
 Ry=np.multiply(R, np.sin(2*theta))
 
 mpl.quiver(Rx, Ry)
@@ -88,6 +81,7 @@ print('49,49', gammat[49,49])
 print('49,51', gammat[49,51])
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+kappa2=np.zeros((ysize, xsize))
 psit=np.zeros((ysize, xsize), dtype=np.complex)
 kappat=np.zeros((ysize, xsize), dtype=np.complex) #define arrays to be filled by for loop, sizes of dimensions
 
@@ -98,7 +92,7 @@ for l in range(0,xsize):
 	for i in range(0, ysize):
 		xi1=(i-xsize/2)
 		xi2=(l-ysize/2)
-		if xi1 == 0 or xi2 ==0: 
+		if xi1 == 0 and xi2 ==0: 
 			psit[l,i]=0 # otherwise is infinite
 		
 					
@@ -109,9 +103,9 @@ for l in range(0,xsize):
 			kappat[l,i]=np.divide((xi1**2-xi2**2-2j*(xi1*xi2))*gammat[l,i], (xi1**2+xi2**2))   #calculate kappa tilda according to eqns [15/12/15]
 	
 		else:
-			kappat[l,i]=1 #is infinite at xi1=0, xi2=0
+			kappat[l,i]=0 #is infinite at xi1=0, xi2=0  
 
-	
+		kappa2[l,i]=(2*(np.pi)**2)*(xi1**2+xi2**2)*psit[l,i]
  
 
 psigr=np.real(psit)
@@ -133,11 +127,7 @@ print('kappa', kappa)
 psi=np.real(psi)
 kappa=np.real(kappa)
 #Produce plots of both kappa and psi
-
-#psideforeal=np.real(np.multiply(psi, np.conj(psi)))
-#kappadeforeal=np.real(np.multiply(kappa, np.conj(kappa)))
-
-#print('49,49 + 51,51', psigr 
+ 
 
 mpl.figure(5)
 mpl.subplot(1,2,1)

@@ -1,0 +1,26 @@
+
+*** These modified files were found in JOE when it aborted on Wed Jan 20 16:32:23 2016
+*** JOE was aborted because the terminal closed
+
+*** File '(Unnamed)'
+/home/local/UNI/mawdsleb/Documents/ICG/.git/COMMIT_EDITMSG
+
+*** File '/home/local/UNI/mawdsleb/Documents/ICG/.git/COMMIT_EDITMSG'
+new attempt at mass maps
+# enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch is up-to-date with 'origin/master'.
+#
+# Changes to be committed:
+#	new file:   AGraphsmass.py
+#
+# Changes not staged for commit:
+#	modified:   postchristmasrsq.py
+#
+# Untracked files:
+#	.~lock.KentReport.odt#
+#	KentReport.lyx
+#	KentReport.odt
+#	postchristmasrsq.py~
+#
